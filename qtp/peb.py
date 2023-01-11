@@ -1,30 +1,53 @@
 import numpy as np
+from scipy.interpolate import CubicSpline
+
 
 class PotentialEnergyBarrier(object):
-    """Onedimensional potential energy barrier in function of spatial coordinate z""" 
+    """Potential energy barrier in function of z coordinate
+    
+    Parameters
+    ----------
+    zvalues_bohr: array-like
+        Sequence of 1D coordinate values in bohr
+    energies_hartree: array-like
+        Sequence of energy values in hartree corresponding to the values
+        in `zvalues_bohr`
+    """
 
     def __init__(self, zvalues_bohr: list, energies_hartree: list): 
-        raise NotImplementedError("Class not implemented yet!")
+        self._zvalues_bohr = zvalues_bohr
+        self._energies_hartree = energies_hartree 
+        self._cubic_spline = CubicSpline(self._zvalues_bohr,
+                                         self._energies_hartree,
+                                         extrapolate=False)
 
-    def __call__(self, z_bohr: float, der=0: int) -> float:
-        """Return the potential energy or its derivative for a given coordinate. 
+    def __call__(self, z_bohr, der=0):
+        """Returns the energy values associated to input coordinates
 
         Parameters
         ----------
-        z_bohr: float
-            Coordinate in bohrs
+        z_bohr: float or array-like
+            Coordinate values in bohr
         der: int
             Order of the derivative
 
         Return
         ------
-        float
-            Value of the potential energy at position z_bohr
+        float or array-like
+            Energy values corresponding to the `z_bohr`
+
+        Notes
+        -----
+        It is assumed that the potential energy function is converged to
+        zero on the right and left sides. Thus, it is assumed that 
+        the energy -- and its derivatives -- are zero outside the bounds
+        of the cubic spline representing the potential energy function.
         """
-        raise NotImplementedError("Evaluation of PotentialEnergyBarrier not implemented yet!") 
+        ret = self._cubic_spline(z_bohr, nu=der, extrapolate=False)
+        return np.nan_to_num(ret)
 
     def get_coords_from_energy(self, energy_hartree: float) -> np.array: 
-        """Return coordinates for a given potential energy value
+        """Return the coordinates corresponding to a given energy value
 
         Parameters
         ----------
@@ -34,10 +57,31 @@ class PotentialEnergyBarrier(object):
         Return
         ------
         array-like
-            List of all coordinates (in bohr) associated with the input energy value
+            List of all coordinates (in bohr) associated with the input 
+            energy value
         """
-        raise NotImplementedError("Finding coordinates for given potential energy is not implemented yet!")
+        assert energy_hartree > -1e-6, \
+                "Potential energy barrier must be positive!"
+        return self._cubic_spline.solve(y=energy_hartree, extrapolate=True)
 
     def get_max_energy(self) -> float: 
-        """Return the maximum potential energy value"""
-        raise NotImplementedError("Finding maximum energy is not yet possible.")
+        """Return the maximum potential energy value."""
+        critical_pts = self._cubic_spline.derivative(nu=1).roots()
+        return np.max(self.__call__(critical_pts))
+
+
+if __name__ == '__main__': 
+    from matplotlib import pyplot as plt
+
+    zvalues_bohr = np.linspace(-5.0, 5.0, 30, endpoint=True)
+    energies_hartree = 0.05 * np.exp(-(zvalues_bohr**2)/4.0)
+
+    PEBFunction = PotentialEnergyBarrier(zvalues_bohr, energies_hartree)
+    zs = np.linspace(-6, 6, 100, endpoint=True)
+
+    print("max. energy:", PEBFunction.get_max_energy())
+
+    plt.plot(zvalues_bohr, energies_hartree, 'o-', label="input")
+    plt.plot(zs, PEBFunction(zs), label="CubicSpline")
+    plt.legend()
+    plt.show()
