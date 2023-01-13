@@ -45,35 +45,3 @@ class PFlux(object):
 
         return pflux_class, pflux_qm
 
-
-if __name__ == '__main__': 
-    from matplotlib import pyplot as plt
-    from peb import PotentialEnergyBarrier
-    from traco import TransCoeff
-    from scipy import constants
-
-    dalton2me = constants.atomic_mass/constants.m_e
-    kelvin2au = 1 / (constants.value('Hartree energy')/constants.k)
-
-    zvals = np.linspace(-5.0, 5.0, 30, endpoint=True)
-    evals = 0.05 * np.exp(-(zvals**2)/4.0)
-
-    PEB = PotentialEnergyBarrier(zvals, evals)
-    TraCo = TransCoeff(PEB, dalton2me)
-    pflux = PFlux(TraCo)
-
-    for temperature in [100, 200, 300]:
-        beta_au = 1/(temperature*kelvin2au)
-        print(temperature, beta_au, pflux(beta_au))
-
-    zs = np.linspace(-6, 6, 100, endpoint=True)
-    
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2)
-
-    ax1.plot(zvals, evals, 'o-', label="input")
-    ax1.plot(zs, PEB(zs), label='cubic splines')
-    ax1.legend()
-
-    ax2.plot(evals, [np.exp(TraCo(e)) for e in evals])
-
-    plt.show()

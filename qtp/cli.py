@@ -37,9 +37,3 @@ cli_parser.add_argument('-eshift', dest='eshift_hartree',
         help=("Apply energy shift to the potential energy barrier."
               " The energy barrier should have its baseline at zero." 
               " (Default: 0)"))
-
-
-if __name__ == '__main__': 
-    cli_args = cli_parser.parse_args()
-    for arg in cli_args.__dict__:
-        print(arg, getattr(cli_args, arg))

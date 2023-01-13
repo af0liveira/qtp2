@@ -69,19 +69,3 @@ class PotentialEnergyBarrier(object):
         critical_pts = self._cubic_spline.derivative(nu=1).roots()
         return np.max(self.__call__(critical_pts))
 
-
-if __name__ == '__main__': 
-    from matplotlib import pyplot as plt
-
-    zvalues_bohr = np.linspace(-5.0, 5.0, 30, endpoint=True)
-    energies_hartree = 0.05 * np.exp(-(zvalues_bohr**2)/4.0)
-
-    PEBFunction = PotentialEnergyBarrier(zvalues_bohr, energies_hartree)
-    zs = np.linspace(-6, 6, 100, endpoint=True)
-
-    print("max. energy:", PEBFunction.get_max_energy())
-
-    plt.plot(zvalues_bohr, energies_hartree, 'o-', label="input")
-    plt.plot(zs, PEBFunction(zs), label="CubicSpline")
-    plt.legend()
-    plt.show()

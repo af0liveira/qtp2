@@ -49,28 +49,3 @@ class TransCoeff(object):
 
         return -2*np.sqrt(2*self.pmass_me) * integral[0]
 
-
-if __name__ == '__main__':
-    from matplotlib import pyplot as plt
-    from peb import PotentialEnergyBarrier
-    from scipy import constants
-
-    dalton2me = constants.atomic_mass/constants.m_e
-
-    zvals = np.linspace(-5.0, 5.0, 30, endpoint=True)
-    evals = 0.05 * np.exp(-(zvals**2)/4.0)
-
-    PEB = PotentialEnergyBarrier(zvals, evals)
-    TraCo = TransCoeff(PEB, dalton2me)
-
-    zs = np.linspace(-6, 6, 100, endpoint=True)
-    
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2)
-
-    ax1.plot(zvals, evals, 'o-', label="input")
-    ax1.plot(zs, PEB(zs), label='cubic splines')
-    ax1.legend()
-
-    ax2.plot(evals, [np.exp(TraCo(e)) for e in evals])
-
-    plt.show()

@@ -81,6 +81,8 @@ def qtp2():
 
     transco_df.insert(2, r'T(E)', np.exp(transco_df[r'ln[T(E)]']))
     transco_df.insert(0, r'z/angstrom', transco_df[r'z/bohr']/angst2bohr)
+    transco_df.insert(0, r'pmass/m_e', pmass_me)
+    transco_df.insert(0, r'pmass/Da', pmass_Da)
 
     print(transco_df, end='\n\n', flush=True)
 
@@ -112,6 +114,8 @@ def qtp2():
                 r'flux_total': j_class+j_tunnel, 
             }
         )
+    pflux_df.insert(3, r'pmass/m_e', pmass_me)
+    pflux_df.insert(3, r'pmass/Da', pmass_Da)
 
     print(pflux_df, end='\n\n', flush=True)
 
@@ -139,6 +143,9 @@ def qtp2():
                     r'Afactor_total': coeffs_total,
                 }
             )
+        arrhenius_df.insert(3, r'pmass/m_e', pmass_me)
+        arrhenius_df.insert(3, r'pmass/Da', pmass_Da)
+
         print(arrhenius_df, end='\n\n', flush=True)
 
     # The end
