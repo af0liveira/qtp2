@@ -33,7 +33,7 @@ $$
 The average transmission probabilities $k$ are then computed as
 
 $$
-k_\alpha = \sqrt{2\pi m \beta} u_\alpha
+k_\alpha =  u_\alpha \sqrt{2\pi m \beta}
 $$
 
 where $\alpha$ indicates _classical_, _tunneling_, or _total_ probabilities. 
@@ -91,3 +91,10 @@ The output contains three blocks of information
 3. the Arrhenius activation energies and exponential prefactors -- note that at least two temperature values are required for this, though
 
 * * *
+
+[Poltavsky et al.(2018)] 
+I Poltavsky et al. 
+"Quantum tunneling of thermal protons through pristine graphene." 
+_Journal of Chemical Physics_ 148(20), 204707 
+(doi: 10.1063/1.5024317)
+
