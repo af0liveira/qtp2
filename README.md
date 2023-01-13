@@ -26,14 +26,14 @@ $$
 \begin{gather}
 u_\mathrm{class}(\beta) = \frac{e^{-\beta U_\mathrm{max}}}{\sqrt{2\pi m \beta}} \\
 u_\mathrm{tunnel}(\beta) = 
-    \sqrt{\frac{\beta}{2\pi m}} \int_0^\infty T(E)\,e^{\beta U(z)} \mathrm{d}E
+    \sqrt{\frac{\beta}{2\pi m}} \int_0^\infty T(E) e^{\beta U(z)} \mathrm{d}E
 \end{gather}
 $$
 
 The average transmission probabilities $k$ are then computed as
 
 $$
-k_\alpha = \sqrt{2\pi m \beta}\,u_\alpha
+k_\alpha = \sqrt{2\pi m \beta} u_\alpha
 $$
 
 where $\alpha$ indicates _classical_, _tunneling_, or _total_ probabilities. 
@@ -41,7 +41,7 @@ where $\alpha$ indicates _classical_, _tunneling_, or _total_ probabilities.
 Finally, the Arrhenius equation 
 
 $$
-\ln\,k = \ln\,A - \beta\,E_\mathrm{a}
+\ln k = \ln A - \beta E_\mathrm{a}
 $$
 
 is used to calculate the activation energies $E_\mathrm{a}$ and pre-exponential factors $A$. 
